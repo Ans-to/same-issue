@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 // 3-D simplex noise (Stefan Gustavson / Ashima Arts, MIT).
-const simplex = `
+export const simplex = `
 vec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}
 vec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}
 vec4 permute(vec4 x){return mod289(((x*34.0)+1.0)*x);}
@@ -32,8 +32,8 @@ export function weatheredMaterial({ color, moss = 0, metalness = 0, roughness = 
   material.userData.time = time;
   material.onBeforeCompile = shader => {
     if (water) shader.uniforms.waterTime = time;
-    shader.vertexShader = shader.vertexShader.replace('#include <common>', `#include <common>\nvarying vec3 vWeatherWorld;\nvarying float vWeatherNoise;\n${simplex}`)
-      .replace('#include <begin_vertex>', `#include <begin_vertex>\n vWeatherNoise = snoise(position * 3.1); transformed += objectNormal * vWeatherNoise * 0.003;`)
+    shader.vertexShader = shader.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vWeatherWorld;\nvarying float vWeatherNoise;')
+      .replace('#include <begin_vertex>', `#include <begin_vertex>\n vWeatherNoise = sin(position.x * 3.1 + position.y * 2.3) * cos(position.z * 3.7); transformed += objectNormal * vWeatherNoise * 0.003;`)
       .replace('#include <worldpos_vertex>', `#include <worldpos_vertex>
         vec4 weatherPosition = vec4(transformed, 1.0);
         #ifdef USE_INSTANCING
@@ -46,10 +46,17 @@ export function weatheredMaterial({ color, moss = 0, metalness = 0, roughness = 
         float fine = snoise(vWeatherWorld * 8.0);
         float grain = clamp(0.90 + broad * 0.13 + fine * 0.08, 0.55, 1.2);
         diffuseColor.rgb *= grain;
+        float gilded = ${Number(metalness).toFixed(3)};
+        float patina = smoothstep(.20, .8, fine * .5 + broad * .35 + .3);
+        vec3 goldGradient = mix(vec3(.72, .48, .18), vec3(1.18, 1.0, .66), clamp(.5 + .35 * broad + .25 * sin(vWeatherWorld.y * 2.0), 0.0, 1.0));
+        diffuseColor.rgb *= mix(vec3(1.0), goldGradient, gilded * .45);
+        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * vec3(.78,.86,.69), gilded * patina * .16);
         float mossMask = smoothstep(0.12, 0.65, broad * 0.5 + 0.55 * fine);
         diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.12, 0.22, 0.075), mossMask * ${Number(moss).toFixed(3)});
-        ${water ? "float ripples = sin(vWeatherWorld.x * 10.0 + fine * 3.0 + waterTime * 1.1) * sin(vWeatherWorld.z * 8.0 - waterTime * 0.8); diffuseColor.rgb *= 1.0 + 0.1 * ripples;" : ""}`);
+        ${water ? "float ripples = sin(vWeatherWorld.x * 10.0 + fine * 3.0 + waterTime * 1.1) * sin(vWeatherWorld.z * 8.0 - waterTime * 0.8); diffuseColor.rgb *= 1.0 + 0.1 * ripples;" : ""}`)
+      .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
+        roughnessFactor = clamp(roughnessFactor + (vWeatherNoise * .075), .18, 1.0);`);
   };
-  material.customProgramCacheKey = () => `weather-v2-${moss}-${water}`;
+  material.customProgramCacheKey = () => `weather-v3-${moss}-${water}-${metalness}`;
   return material;
 }

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { simplex } from './materials.js';
 
 // A world-space sky gradient with a broad, warm sun halo. No texture assets.
 export function createAtmosphere() {
@@ -24,10 +25,12 @@ export function createAtmosphere() {
       uniform vec3 sunColor;
       uniform vec3 sunDirection;
       varying vec3 vDirection;
+      ${simplex}
       void main() {
         vec3 direction = normalize(vDirection);
         float height = smoothstep(-0.12, 0.75, direction.y);
         vec3 sky = mix(horizon, zenith, height);
+        sky *= 1.0 + 0.025 * snoise(direction * 7.0);
         float alignment = max(dot(direction, sunDirection), 0.0);
         float halo = pow(alignment, 16.0) * 0.28 + pow(alignment, 180.0) * 0.5;
         gl_FragColor = vec4(sky + sunColor * halo, 1.0);

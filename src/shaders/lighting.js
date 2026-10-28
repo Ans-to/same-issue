@@ -17,6 +17,8 @@ export function addLightingAndAtmosphere(scene) {
   sun.shadow.normalBias = 0.035;
   sun.shadow.camera.updateProjectionMatrix();
   scene.add(sun);
+  const bounce = new THREE.DirectionalLight(0xffe1a6, .9);
+  bounce.position.set(8, 9, 18); bounce.name = 'golden bounce'; scene.add(bounce);
   return { sun, fill };
 }
 

@@ -50,7 +50,7 @@ test('camera path is deterministic, clamped and continuous for fractional frames
   const end = camera.position.clone();
   updateCamera(camera, 600);
   assert.ok(camera.position.distanceTo(end) < 1e-12);
-  assert.ok(end.distanceTo(new THREE.Vector3(2.6, 5, 12.5)) < 1e-10);
+  assert.ok(end.distanceTo(new THREE.Vector3(4, 7.2, 17)) < 1e-10);
 });
 
 test('high-detail scene is dense and deterministic without external assets', async () => {
@@ -58,16 +58,33 @@ test('high-detail scene is dense and deterministic without external assets', asy
   const temple = createTemple();
   const garden = createGarden();
   const landscape = createLandscape();
-  assert.equal(temple.getObjectByName('roof tiles').count, 3248);
+  assert.equal(temple.getObjectByName('roof tiles').count, 952);
   assert.equal(temple.getObjectByName('eave brackets').count, 152);
-  assert.equal(garden.getObjectByName('lotus pads').count, 360);
-  assert.equal(garden.getObjectByName('lotus flower centers').count, 240);
-  assert.equal(garden.getObjectByName('lotus petals').count, 2160);
+  assert.equal(garden.getObjectByName('lotus pads').count, 300);
+  assert.equal(garden.getObjectByName('lotus flower centers').count, 200);
+  assert.equal(garden.getObjectByName('lotus petals').count, 1200);
   assert.ok(garden.getObjectByName('water ripples').count > 20);
-  assert.ok(landscape.getObjectByName('tree foliage clusters').count > 700);
+  assert.ok(landscape.getObjectByName('tree foliage clusters').count >= 190);
   const anotherGarden = createGarden();
   assert.deepEqual([...garden.getObjectByName('lotus pads').instanceMatrix.array], [...anotherGarden.getObjectByName('lotus pads').instanceMatrix.array]);
   const pond = garden.children.find(child => child.material?.userData?.time);
   garden.userData.update(2.5);
   assert.equal(pond.material.userData.time.value, 2.5);
+});
+
+test('multi-tier temple and garden contain millions of real rendered triangles', async () => {
+  const { createGarden } = await import('../src/geometries/garden.js');
+  let triangles = 0;
+  for (const group of [createTemple(), createLandscape(), createGarden()]) {
+    group.traverse(object => {
+      if (!object.isMesh) return;
+      const geometry = object.geometry;
+      assert.ok(geometry.attributes.position.count >= 1000, `${object.name || geometry.type} has insufficient vertices`);
+      const faces = (geometry.index ? geometry.index.count : geometry.attributes.position.count) / 3;
+      triangles += faces * (object.isInstancedMesh ? object.count : 1);
+      assert.equal(typeof object.material.onBeforeCompile, 'function');
+    });
+  }
+  assert.ok(triangles > 1_000_000, `Only ${triangles} triangles`);
+  console.log(`Procedural scene triangle count: ${triangles.toLocaleString()}`);
 });

@@ -4,13 +4,13 @@ import { FILM_DURATION, frameTime } from './timeline.js';
 // A gentle arcing dolly in. Evaluating a cubic rather than integrating motion
 // makes seeking and future temporal samples independent of render order.
 const path = new THREE.CubicBezierCurve3(
-  new THREE.Vector3(11, 8, 18),
-  new THREE.Vector3(9, 7, 17),
-  new THREE.Vector3(5, 5.8, 15),
-  new THREE.Vector3(2.6, 5.0, 12.5),
+  new THREE.Vector3(13, 11, 25),
+  new THREE.Vector3(11, 10, 23),
+  new THREE.Vector3(8, 8, 20),
+  new THREE.Vector3(4, 7.2, 17),
 );
-const lookStart = new THREE.Vector3(0, 2.1, 0);
-const lookEnd = new THREE.Vector3(0, 2.35, 0);
+const lookStart = new THREE.Vector3(0, 4.1, 0);
+const lookEnd = new THREE.Vector3(0, 4.3, 0);
 const target = new THREE.Vector3();
 
 export function updateCamera(camera, frame, fps = 60) {
