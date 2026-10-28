@@ -45,3 +45,10 @@ When generating the frame capture script (`src/render/capture.js`):
    * Render multiple sub-frames per output frame.
    * Blend sub-frame color buffers together before writing the final frame to disk.
 3. **Video Compilation:** Provide an automated script or `ffmpeg` command to assemble output PNG frames into an H.264 MP4 video file.
+
+# SKILL: Ultra-High-Density Procedural 3D Film Generator
+
+## 🛑 STRICT ANTI-LOW-POLY ENFORCEMENT
+1. **NO LOW-POLY PRIMITIVES:** The use of basic box, sphere, or low-segment cylinder geometries for primary architecture or props is strictly banned. Every asset must be procedurally subdivided into thousands of high-density vertices.
+2. **Massive Geometry Scale:** The scene must target a minimum complexity of millions of triangles, using nested loops to build intricate structural elements (e.g., stacked traditional roof brackets, tile-by-tile roof arrays, and detailed lattice windows).
+3. **Complex Procedural Shaders:** Flat diffuse colors are forbidden. Every material must use procedural noise functions (Simplex/Perlin noise) to generate organic weathering, metallic reflections, gold plating gradients, and soft multi-layered shadows.
