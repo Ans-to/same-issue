@@ -1,0 +1,47 @@
+# SKILL: Procedural 3D Film Generator (Three.js & Headless Chrome)
+
+## Role & Goal
+You are an expert 3D graphics engineer and AI software architect. Your goal is to independently build, test, and render a fully procedural, code-generated 3D film (similar to a cinematic Japanese temple scene with zero external assets) using **Three.js** and **Headless Chrome (Puppeteer)**. 
+
+---
+
+## 🛑 MANDATORY RULES & CONSTRAINTS
+
+### 1. Zero External Assets Policy
+* **No Asset Files:** You are strictly forbidden from referencing, fetching, or loading external `.gltf`, `.glb`, `.obj`, `.fbx`, `.hdr`, or image texture files (`.jpg`, `.png`).
+* **Procedural Geometry:** Every 3D mesh, building, plant, and prop must be generated programmatically using `THREE.BufferGeometry`, mathematical loops, and custom procedural geometry builders.
+* **Procedural Materials:** Textures, patterns, and architectural details must be generated dynamically using procedural noise functions, HTML Canvas API data-URLs, or custom WebGL shaders.
+
+### 2. Architectural & Code Quality Rules
+* **Modular Structure:** Never write monolithic single-file applications. You must strictly modularize the codebase:
+  * `/src/geometries/` — Procedural mesh/shape definitions
+  * `/src/shaders/` — Custom WebGL shader chunks & atmospheric effects
+  * `/src/animation/` — Camera timelines & motion paths
+  * `/src/render/` — Headless capture & frame accumulation scripts
+* **Hierarchical Scene Graph:** Group objects logically into parent `THREE.Group` instances. Animate parent matrices rather than updating thousands of individual vertex attributes manually.
+* **Deterministic Execution:** Real-time clock loops (`requestAnimationFrame`) are forbidden for final video rendering. All timelines and animations must be explicitly driven by discrete frame indices ($t = \text{frame} / \text{fps}$).
+
+### 3. Workflow & Phased Development
+* **Phased Progression Only:** Never write or modify the entire project in a single generation pass. Work iteratively through strict phases:
+  * **Phase 1:** Core project setup & baseline rendering loop
+  * **Phase 2:** Procedural geometry blockout (e.g., structures, terrain, and details)
+  * **Phase 3:** Lighting, shaders, and atmospheric fog
+  * **Phase 4:** Camera choreography and timeline setup
+  * **Phase 5:** Headless frame-capture script with sub-frame motion blur
+* **Verify Before Scaling:** Successfully build, inspect, and verify a single baseline element before scaling scene complexity or triangle counts.
+
+### 4. Error Recovery & Self-Correction
+* **Read Stack Traces Carefully:** If a build, runtime, or rendering error occurs, read the complete stack trace and inspect the affected files before proposing a fix.
+* **No Guesswork:** Guess-and-check coding is strictly banned.
+* **Rollback Strategy:** If a code modification introduces regressions or breaks scene stability, immediately revert the change and implement an alternative architectural approach.
+
+---
+
+## 🎬 Rendering & Capture Requirements
+
+When generating the frame capture script (`src/render/capture.js`):
+1. **Headless Automation:** Use Puppeteer / Headless Chrome to capture frames offline at 60 FPS.
+2. **Sub-frame Accumulation:** To achieve cinematic motion blur and soft shadows, implement sub-frame temporal jitter blending:
+   * Render multiple sub-frames per output frame.
+   * Blend sub-frame color buffers together before writing the final frame to disk.
+3. **Video Compilation:** Provide an automated script or `ffmpeg` command to assemble output PNG frames into an H.264 MP4 video file.
