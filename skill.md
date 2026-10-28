@@ -61,3 +61,12 @@ When generating the frame capture script (`src/render/capture.js`):
 1. **NO LOW-POLY PRIMITIVES:** The use of basic box, sphere, or low-segment cylinder geometries for primary architecture or props is strictly banned. Every asset must be procedurally subdivided into thousands of high-density vertices.
 2. **Massive Geometry Scale:** The scene must target a minimum complexity of millions of triangles, using nested loops to build intricate structural elements (e.g., stacked traditional roof brackets, tile-by-tile roof arrays, and detailed lattice windows).
 3. **Complex Procedural Shaders:** Flat diffuse colors are forbidden. Every material must use procedural noise functions (Simplex/Perlin noise) to generate organic weathering, metallic reflections, gold plating gradients, and soft multi-layered shadows.
+
+   
+## 🎥 MANDATORY VIDEO RENDERING RULE: HYPERFRAMES
+* **Exclusive Engine:** Raw manual WebGL, Three.js, or Puppeteer frame-capture loops are permanently banned for video generation.
+* **Required Toolchain:** All future video and motion graphic projects must use **HyperFrames** (`npx hyperframes init`).
+* **Execution Contract:** 
+  1. Build compositions using modular HTML, CSS, and hardware-accelerated animations.
+  2. Validate frames via `npx hyperframes snapshot`.
+  3. Compile final outputs using `npx hyperframes render` to guarantee fast, deterministic MP4 results instead of multi-hour bottlenecks.
