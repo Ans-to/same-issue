@@ -19,6 +19,15 @@ You are an expert 3D graphics engineer and AI software architect. Your goal is t
   * `/src/animation/` — Camera timelines & motion paths
   * `/src/render/` — Headless capture & frame accumulation scripts
 * **Hierarchical Scene Graph:** Group objects logically into parent `THREE.Group` instances. Animate parent matrices rather than updating thousands of individual vertex attributes manually.
+
+* ## 🎥 MANDATORY VIDEO RENDERING RULE: HYPERFRAMES
+* **Exclusive Engine:** For any future video generation, motion graphics, or visual rendering tasks, raw manual WebGL/Three.js capture loops are completely banned.
+* **Required Toolchain:** The agent must initialize and build video projects using **HyperFrames** (`npx hyperframes init`).
+* **Workflow Contract:** 
+  1. Build compositions using clean HTML/CSS and seekable animations.
+  2. Run `npx hyperframes check` to validate layout and contrast.
+  3. Use `npx hyperframes snapshot` to visually inspect frames.
+  4. Render the final output via `npx hyperframes render` to guarantee deterministic, high-quality MP4 results.
 * **Deterministic Execution:** Real-time clock loops (`requestAnimationFrame`) are forbidden for final video rendering. All timelines and animations must be explicitly driven by discrete frame indices ($t = \text{frame} / \text{fps}$).
 
 ### 3. Workflow & Phased Development
