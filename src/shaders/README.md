@@ -1,0 +1,1 @@
+`atmosphere.js` creates a procedural gradient sky and sun halo shader. `lighting.js` sets up fog, a hemisphere fill, a shadow-casting directional sun, and scene shadow flags. No textures or external assets are used.

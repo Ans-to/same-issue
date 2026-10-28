@@ -1,0 +1,21 @@
+{
+  "name": "same-issue",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/render/server.js",
+    "test": "node --test",
+    "verify": "node src/render/verify.js",
+    "capture": "node src/render/capture.js",
+    "compile": "node src/render/compile.js"
+  },
+  "dependencies": {
+    "puppeteer": "^25.16.0",
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@sparticuz/chromium": "^143.0.0"
+  }
+}
