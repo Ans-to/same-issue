@@ -1,6 +1,6 @@
 # Procedural film
 
-A zero-asset Three.js film following the phases in [skill.md](skill.md). The scene uses procedural geometry, a shader-generated sky, fog, cinematic lighting, and a deterministic five-second camera move.
+A zero-asset, procedurally detailed Three.js film following the phases in [skill.md](skill.md). The scene uses instanced geometry (3,248 roof tiles, eave brackets, latticework, six lanterns, 240 lotus flowers, and hundreds of tree foliage clusters), simplex-noise weathering and animated water shaders, a shader-generated sky, fog, cinematic lighting, and a deterministic five-second camera move. All textures and geometry are generated in code.
 
 ## Setup and verification
 
@@ -14,7 +14,7 @@ On Linux the verification and capture scripts use the npm-distributed `@sparticu
 
 ## Render the film
 
-Run `npm run capture` followed by `npm run compile`. Capture writes 300 PNGs named `frames/frame_000000.png` through `frame_000299.png`; compilation checks that all frames exist and produces `film.mp4` as H.264, 640×360, 60 FPS, five seconds, no audio. The compiler uses the bundled FFmpeg binary; `FFMPEG_PATH` can select a different FFmpeg with libx264 support. Output frames, the frame archive, and MP4s are ignored by Git.
+Run `npm run capture` followed by `npm run compile`. If the default frames directory already contains an earlier render, use `npm run capture -- --output frames-hd` then `npm run compile -- frames-hd film-hd.mp4`. Capture writes 300 PNGs named `frames/frame_000000.png` through `frame_000299.png`; compilation checks that all frames exist and produces `film.mp4` as H.264, 640×360, 60 FPS, five seconds, no audio. The compiler uses the bundled FFmpeg binary; `FFMPEG_PATH` can select a different FFmpeg with libx264 support. Output frames, the frame archive, and MP4s are ignored by Git.
 
 Capture uses four equally spaced sub-frame samples over a half-frame, forward-looking shutter; display-referred color buffers are averaged before PNG encoding. The static shadow maps are sampled along with the rest of the scene; this is temporal anti-aliasing/motion blur, not physically simulated area-light soft shadows. The renderer supports fractional frame indices and has no real-time clock. Output frames cover indices 0–299. The camera reaches its final pose at 5 seconds (frame 300); poses beyond this are clamped.
 
@@ -24,5 +24,5 @@ For a short test, use e.g. `npm run capture -- --output /tmp/film-test --start 1
 
 - `src/geometries/`: procedural temple, terrain, and props
 - `src/animation/`: explicit frame timing and camera path
-- `src/shaders/`: procedural sky shader, lighting, and fog setup
+- `src/shaders/`: procedural sky, simplex-noise materials, lighting, and fog
 - `src/render/`: local server, headless verification, accumulation, capture and compilation
